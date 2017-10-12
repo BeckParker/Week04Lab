@@ -29,7 +29,6 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Cookie[] cookies = request.getCookies();
         String name = "";
-        String action = request.getParameter("action");
         
         if (cookies != null){
             for (Cookie cookie: cookies){
@@ -45,10 +44,6 @@ public class LoginServlet extends HttpServlet {
             return;
         }
         
-        if (action.equals("logout")){
-            session.setAttribute("user", null);
-            request.setAttribute("success", "You have been successfully logged out");
-        }
         
         getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
     }
@@ -60,6 +55,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         boolean checked = false;
         HttpSession session = request.getSession();
+        String action = request.getParameter("action");
         
         if (request.getParameter("rememberme") != null) {
             checked = true;
@@ -85,5 +81,10 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("user", user);
             response.sendRedirect("home");
         }
+        
+        if (action.equals("logout")){
+            session.setAttribute("user", null);
+            request.setAttribute("success", "You have been successfully logged out");
+        } 
     }
 }
